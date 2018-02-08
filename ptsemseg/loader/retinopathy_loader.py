@@ -96,7 +96,7 @@ class RetinopathyLoader(data.Dataset):
             return rgb
 
 if __name__ == '__main__':
-    local_path = '/Users/meet/data/ADE20K_2016_07_26/'
+    local_path = '/home/gustavo1/deep_learning/datasets/IDRiD/'
     dst = RetinopathyLoader (local_path, is_transform=True)
     trainloader = data.DataLoader(dst, batch_size=4)
     for i, data in enumerate(trainloader):
