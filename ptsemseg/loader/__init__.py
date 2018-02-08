@@ -5,6 +5,7 @@ from ptsemseg.loader.camvid_loader import camvidLoader
 from ptsemseg.loader.ade20k_loader import ADE20KLoader
 from ptsemseg.loader.mit_sceneparsing_benchmark_loader import MITSceneParsingBenchmarkLoader
 from ptsemseg.loader.cityscapes_loader import cityscapesLoader
+from ptsemseg.loader.retinopathy_loader import RetinopathyLoader
 
 def get_loader(name):
     """get_loader
