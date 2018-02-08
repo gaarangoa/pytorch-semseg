@@ -17,6 +17,7 @@ def get_loader(name):
         'ade20k': ADE20KLoader,
         'mit_sceneparsing_benchmark': MITSceneParsingBenchmarkLoader,
         'cityscapes': cityscapesLoader,
+        'retinopathy': RetinopathyLoader,
     }[name]
 
 
