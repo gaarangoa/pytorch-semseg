@@ -16,7 +16,7 @@ class RetinopathyLoader(data.Dataset):
         self.category = category
         self.split = split
         self.is_transform = is_transform
-        self.n_classes = 150
+        self.n_classes = 5
         self.img_size = img_size if isinstance(img_size, tuple) else (img_size, img_size)
         self.mean = np.array([104.00699, 116.66877, 122.67892])
         self.files = collections.defaultdict(list)
