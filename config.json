@@ -1,31 +1,29 @@
 {
-  "pascal":
-  {
-    "data_path": "/home/gpu_users/meetshah/segdata/pascal/VOCdevkit/VOC201/"
-  },
+    "retinopathy": {
+        "data_path": "/home/gustavo1/deep_learning/datasets/IDRiD/"
+    },
 
-  "sbd":
-  {
-    "data_path": "/home/gpu_users/meetshah/segdata/pascal/benchmark_RELEASE/"
-  },
+    "pascal": {
+        "data_path": "/home/gpu_users/meetshah/segdata/pascal/VOCdevkit/VOC201/"
+    },
 
-  "camvid":
-  {
-    "data_path": "/Users/meet/data/CamVid/"
-  },
-  
-  "ade20k":
-  {
-    "data_path": "/Users/meet/data/ADE20K_2016_07_26/"
-  },
-  
-  "mit_sceneparsing_benchmark":
-  {
-    "data_path": "/home/ubuntu/DATA/ADEChallengeData2016/"
-  },
-  
-  "cityscapes":
-  {
-    "data_path": "/home/meet/datasets/cityscapes/"
-  }
+    "sbd": {
+        "data_path": "/home/gpu_users/meetshah/segdata/pascal/benchmark_RELEASE/"
+    },
+
+    "camvid": {
+        "data_path": "/Users/meet/data/CamVid/"
+    },
+
+    "ade20k": {
+        "data_path": "/Users/meet/data/ADE20K_2016_07_26/"
+    },
+
+    "mit_sceneparsing_benchmark": {
+        "data_path": "/home/ubuntu/DATA/ADEChallengeData2016/"
+    },
+
+    "cityscapes": {
+        "data_path": "/home/meet/datasets/cityscapes/"
+    }
 }
