@@ -26,7 +26,7 @@ def train(args):
     # Setup Dataloader
     data_loader = get_loader(args.dataset)
     data_path = get_data_path(args.dataset)
-    t_loader = data_loader(data_path, is_transform=True, img_size=(args.img_rows, args.img_cols), augmentations=data_aug)
+    t_loader = data_loader(data_path, is_transform=True, img_size=(args.img_rows, args.img_cols), augmentations=data_aug, category=args.category)
     v_loader = data_loader(data_path, is_transform=True, split='val', img_size=(args.img_rows, args.img_cols))
 
     n_classes = t_loader.n_classes
@@ -145,5 +145,7 @@ if __name__ == '__main__':
                         help='Path to previous saved model to restart from')
     parser.add_argument('--visdom', nargs='?', type=bool, default=False, 
                         help='Show visualization(s) on visdom | False by  default')
+    parser.add_argument('--category', nargs='?', type=str, default="MA", 
+                        help='category for the classification (only for retinopathy) | MA as default')
     args = parser.parse_args()
     train(args)
