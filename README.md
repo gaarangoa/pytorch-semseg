@@ -115,3 +115,10 @@ python test.py [-h] [--model_path [MODEL_PATH]] [--dataset [DATASET]]
   --img_path            Path of the input image
   --out_path            Path of the output segmap
 ```
+
+**How to use it for retinopathy image
+0. Create a virtualenv 
+1. Make sure to install the dependencies `pip install -r requirements.txt`
+2. modify the path in the config.json file, then change the path where the images are stored
+3. run: ` pytorch-semseg]$ python train.py --arch unet --dataset retinopathy --img_rows 256 --img_cols 256 --n_epoc 5 --batch_size 5 --l_rate 0.1 --category MA `
+4. have fun
