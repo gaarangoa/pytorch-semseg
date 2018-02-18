@@ -11,7 +11,7 @@ from torch.utils import data
 from ptsemseg.utils import recursive_glob
 
 class ADE20KLoader(data.Dataset):
-    def __init__(self, root, split="training", is_transform=False, img_size=512):
+    def __init__(self, root, split="training", is_transform=False, img_size=512, augmentations=[]):
         self.root = root
         self.split = split
         self.is_transform = is_transform
