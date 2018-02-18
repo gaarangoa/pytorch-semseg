@@ -8,7 +8,7 @@
     },
 
     "sbd": {
-        "data_path": "/home/gustavo1/deep_learning/datasets/benchmark_RELEASE/"
+        "data_path": "/home/gustavo1/deep_learning/datasets/VOCdevkit/benchmark_RELEASE/"
     },
 
     "camvid": {
