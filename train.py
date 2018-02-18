@@ -26,7 +26,7 @@ def train(args):
     # Setup Dataloader
     data_loader = get_loader(args.dataset)
     data_path = get_data_path(args.dataset)
-    t_loader = data_loader(data_path, is_transform=True, img_size=(args.img_rows, args.img_cols), augmentations=data_aug, category=args.category)
+    t_loader = data_loader(data_path, is_transform=True, img_size=(args.img_rows, args.img_cols), augmentations=data_aug)
     v_loader = data_loader(data_path, is_transform=True, split='val', img_size=(args.img_rows, args.img_cols))
 
     n_classes = t_loader.n_classes
