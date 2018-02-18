@@ -4,11 +4,11 @@
     },
 
     "pascal": {
-        "data_path": "/home/gpu_users/meetshah/segdata/pascal/VOCdevkit/VOC201/"
+        "data_path": "/home/gustavo1/deep_learning/datasets/VOCdevkit/VOC201/"
     },
 
     "sbd": {
-        "data_path": "/home/gpu_users/meetshah/segdata/pascal/benchmark_RELEASE/"
+        "data_path": "/home/gustavo1/deep_learning/datasets/benchmark_RELEASE/"
     },
 
     "camvid": {
