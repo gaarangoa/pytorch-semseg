@@ -24,11 +24,11 @@ data_aug= Compose([RandomRotate(10),
 
 # Setup Dataloader
 
-args_dataset = "segnet"
+args_dataset = "ade20k" #pascal
 args_img_rows = 128
 args_img_cols = 128
 args_batch_size = 10
-args_arch = "unet"
+args_arch = "fcn8s"
 args_l_rate = 0.01
 args_resume = None
 args_n_epoch = 10
@@ -48,17 +48,7 @@ valloader = data.DataLoader(v_loader, batch_size=args_batch_size, num_workers=8)
 
 # Setup Metrics
 running_metrics = runningScore(n_classes)
-    
-# Setup visdom for visualization
-if args_visdom:
-    vis = visdom.Visdom()
 
-    loss_window = vis.line(X=torch.zeros((1,)).cpu(),
-                        Y=torch.zeros((1)).cpu(),
-                        opts=dict(xlabel='minibatches',
-                                    ylabel='Loss',
-                                    title='Training Loss',
-                                    legend=['Loss']))
 
 # Setup Model
 model = get_model(args_arch, n_classes)
@@ -78,16 +68,6 @@ if hasattr(model.module, 'loss'):
 else:
     loss_fn = cross_entropy2d
 
-if args_resume is not None:                                         
-    if os.path.isfile(args_resume):
-        print("Loading model and optimizer from checkpoint '{}'".format(args_resume))
-        checkpoint = torch.load(args_resume)
-        model.load_state_dict(checkpoint['model_state'])
-        optimizer.load_state_dict(checkpoint['optimizer_state'])
-        print("Loaded checkpoint '{}' (epoch {})"                    
-                .format(args.resume, checkpoint['epoch']))
-    else:
-        print("No checkpoint found at '{}'".format(args_resume)) 
 
 best_iou = -100.0 
 for epoch in range(args_n_epoch):
@@ -95,6 +75,7 @@ for epoch in range(args_n_epoch):
     for i, (images, labels) in enumerate(trainloader):
         images = Variable(images.cuda())
         labels = Variable(labels.cuda())
+        break
 
         optimizer.zero_grad()
         outputs = model(images)
@@ -103,13 +84,6 @@ for epoch in range(args_n_epoch):
 
         loss.backward()
         optimizer.step()
-
-        if args.visdom:
-            vis.line(
-                X=torch.ones((1, 1)).cpu() * i,
-                Y=torch.Tensor([loss.data[0]]).unsqueeze(0).cpu(),
-                win=loss_window,
-                update='append')
 
         if (i+1) % 20 == 0:
             print("Epoch [%d/%d] Loss: %.4f" % (epoch+1, args_n_epoch, loss.data[0]))
