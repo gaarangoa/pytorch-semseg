@@ -24,7 +24,7 @@ data_aug= Compose([RandomRotate(10),
 
 # Setup Dataloader
 
-args_dataset = "pascal"
+args_dataset = "segnet"
 args_img_rows = 128
 args_img_cols = 128
 args_batch_size = 10
