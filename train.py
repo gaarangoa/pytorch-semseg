@@ -33,8 +33,7 @@ def train(args):
     trainloader = data.DataLoader(t_loader, batch_size=args.batch_size, num_workers=8, shuffle=True)
     valloader = data.DataLoader(v_loader, batch_size=args.batch_size, num_workers=8)
 
-    print(trainloader)
-    exit()
+    
 
     # Setup Metrics
     running_metrics = runningScore(n_classes)
