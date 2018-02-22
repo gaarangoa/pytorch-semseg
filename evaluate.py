@@ -32,6 +32,7 @@ args_arch = "unet"
 args_l_rate = 0.01
 args_resume = None
 args_n_epoch = 10
+args_visdom = False
 
 print("loading dataset")
 
@@ -49,7 +50,7 @@ valloader = data.DataLoader(v_loader, batch_size=args_batch_size, num_workers=8)
 running_metrics = runningScore(n_classes)
     
 # Setup visdom for visualization
-if args.visdom:
+if args_visdom:
     vis = visdom.Visdom()
 
     loss_window = vis.line(X=torch.zeros((1,)).cpu(),
