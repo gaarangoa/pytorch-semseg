@@ -30,7 +30,7 @@ class RetinopathyLoader(data.Dataset):
 
     def __getitem__(self, index):
         img_path = self.files[self.split][index].rstrip()
-        print("processing: ", img_path)
+        # print("processing: ", img_path)
         img = m.imread(img_path)
         img = np.array(img, dtype=np.uint8)
 
@@ -56,7 +56,7 @@ class RetinopathyLoader(data.Dataset):
         lbl = lbl.astype(float)
         lbl = m.imresize(lbl, (self.img_size[0], self.img_size[1]), 'nearest', mode='F')
         lbl = lbl.astype(int)
-        print("classes:", classes, "labels in images:",np.unique(lbl))
+        # print("classes:", classes, "labels in images:",np.unique(lbl))
 
         assert(np.all(classes == np.unique(lbl)))
 
