@@ -24,7 +24,7 @@ data_aug= Compose([RandomRotate(10),
 
 # Setup Dataloader
 
-args_dataset = "ade20k" #pascal
+args_dataset = "retinopathy" #pascal
 args_img_rows = 128
 args_img_cols = 128
 args_batch_size = 10
@@ -87,3 +87,6 @@ for epoch in range(args_n_epoch):
 
         if (i+1) % 20 == 0:
             print("Epoch [%d/%d] Loss: %.4f" % (epoch+1, args_n_epoch, loss.data[0]))
+
+
+max(labels[1][:].tolist())

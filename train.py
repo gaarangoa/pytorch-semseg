@@ -33,7 +33,7 @@ def train(args):
     trainloader = data.DataLoader(t_loader, batch_size=args.batch_size, num_workers=8, shuffle=True)
     valloader = data.DataLoader(v_loader, batch_size=args.batch_size, num_workers=8)
 
-    
+
 
     # Setup Metrics
     running_metrics = runningScore(n_classes)
@@ -147,7 +147,7 @@ if __name__ == '__main__':
                         help='Path to previous saved model to restart from')
     parser.add_argument('--visdom', nargs='?', type=bool, default=False, 
                         help='Show visualization(s) on visdom | False by  default')
-    parser.add_argument('--category', nargs='?', type=str, default="MA", 
-                        help='category for the classification (only for retinopathy) | MA as default')
+    # parser.add_argument('--category', nargs='?', type=str, default="MA", 
+                        # help='category for the classification (only for retinopathy) | MA as default')
     args = parser.parse_args()
     train(args)

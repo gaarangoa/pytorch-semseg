@@ -11,7 +11,7 @@ from torch.utils import data
 from ptsemseg.utils import recursive_glob
 
 class RetinopathyLoader(data.Dataset):
-    def __init__(self, root, category="MA", split="training", is_transform=False, img_size=512, augmentations=[]):
+    def __init__(self, root, split="training", is_transform=False, img_size=512, augmentations=[]):
         self.root = root
         self.category = category
         self.split = split
@@ -71,7 +71,8 @@ class RetinopathyLoader(data.Dataset):
         # Refer : http://groups.csail.mit.edu/vision/datasets/ADE20K/code/loadAde20K.m
         mask = mask.astype(int)
         label_mask = np.zeros((mask.shape[0], mask.shape[1]))
-        label_mask = ( mask[:,:,0] / 10.0 ) * 256 + mask[:,:,1]
+        # label_mask = ( mask[:,:,0] / 10.0 ) * 256 + mask[:,:,1]
+        label_mask[np.where(np.all(mask > 1, axis=-1))[:2]] = 1
         return np.array(label_mask, dtype=np.uint8)
 
     def decode_segmap(self, temp, plot=False):
@@ -81,7 +82,7 @@ class RetinopathyLoader(data.Dataset):
         g = temp.copy()
         b = temp.copy()
         for l in range(0, self.n_classes):
-            r[temp == l] = 10 * (l%10)
+            r[temp == l] = l
             g[temp == l] = l
             b[temp == l] = 0
 
