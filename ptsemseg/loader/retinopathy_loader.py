@@ -30,7 +30,7 @@ class RetinopathyLoader(data.Dataset):
 
     def __getitem__(self, index):
         img_path = self.files[self.split][index].rstrip()
-
+        print("processing: ", img_path)
         img = m.imread(img_path)
         img = np.array(img, dtype=np.uint8)
 
