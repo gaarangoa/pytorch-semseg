@@ -46,6 +46,18 @@ n_classes = t_loader.n_classes
 trainloader = data.DataLoader(t_loader, batch_size=args_batch_size, num_workers=8, shuffle=True)
 valloader = data.DataLoader(v_loader, batch_size=args_batch_size, num_workers=8)
 
+for i, (images, labels) in enumerate(trainloader):
+    images = Variable(images.cuda())
+    labels = Variable(labels.cuda())
+    break
+
+
+
+
+
+
+
+
 # Setup Metrics
 running_metrics = runningScore(n_classes)
 
