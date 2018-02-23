@@ -65,8 +65,9 @@ class RetinopathyLoader(data.Dataset):
 
     def encode_segmap(self, lbl_path):
         labels = []
+        lbl_t_path = lbl_path[:-4]
         for lbx,lbi in enumerate(self.classes):
-            lbl_path = lbl_path[:-4] + '_' + lbi + '.tif'
+            lbl_path = lbl_t_path + '_' + lbi + '.tif'
             mask = m.imread(lbl_path)
             mask = np.array(mask, dtype=np.int32)
             mask = mask.astype(int)
