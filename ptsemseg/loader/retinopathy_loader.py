@@ -74,7 +74,7 @@ class RetinopathyLoader(data.Dataset):
             mask = mask.astype(int)
             label_mask = np.zeros((mask.shape[0], mask.shape[1]))
             label_mask[ mask[:,:,0] > 0 ] = lbx+1
-            np.array(label_mask, dtype=np.uint8)
+            label_mask = np.array(label_mask, dtype=np.uint8)
             labels.append(label_mask)
         # 
         # condense the labels into one big label image
