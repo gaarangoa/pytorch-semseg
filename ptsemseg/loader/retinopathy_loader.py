@@ -13,7 +13,6 @@ from ptsemseg.utils import recursive_glob
 class RetinopathyLoader(data.Dataset):
     def __init__(self, root, split="training", is_transform=False, img_size=512, augmentations=[]):
         self.root = root
-        self.category = category
         self.split = split
         self.is_transform = is_transform
         self.classes = ["MA", "HE"]
