@@ -16,7 +16,8 @@ class RetinopathyLoader(data.Dataset):
         self.category = category
         self.split = split
         self.is_transform = is_transform
-        self.n_classes = 5
+        self.classes = ["MA", "HE"]
+        self.n_classes = 3
         self.img_size = img_size if isinstance(img_size, tuple) else (img_size, img_size)
         self.mean = np.array([104.00699, 116.66877, 122.67892])
         self.files = collections.defaultdict(list)
@@ -30,21 +31,17 @@ class RetinopathyLoader(data.Dataset):
 
     def __getitem__(self, index):
         img_path = self.files[self.split][index].rstrip()
-        lbl_path = img_path[:-4] + '_' + self.category + '.tif'
 
         img = m.imread(img_path)
         img = np.array(img, dtype=np.uint8)
 
-        lbl = m.imread(lbl_path)
-        lbl = np.array(lbl, dtype=np.int32)
-
         if self.is_transform:
-            img, lbl = self.transform(img, lbl)
+            img, lbl = self.transform(img, img_path)
 
         return img, lbl
 
 
-    def transform(self, img, lbl):
+    def transform(self, img, lbl_path):
         img = img[:, :, ::-1]
         img = img.astype(np.float64)
         img -= self.mean
@@ -55,7 +52,7 @@ class RetinopathyLoader(data.Dataset):
         # NHWC -> NCWH
         img = img.transpose(2, 0, 1)
 
-        lbl = self.encode_segmap(lbl)
+        lbl = self.encode_segmap(lbl_path)
         classes = np.unique(lbl)
         lbl = lbl.astype(float)
         lbl = m.imresize(lbl, (self.img_size[0], self.img_size[1]), 'nearest', mode='F')
@@ -67,13 +64,23 @@ class RetinopathyLoader(data.Dataset):
         return img, lbl
 
 
-    def encode_segmap(self, mask):
-        # Refer : http://groups.csail.mit.edu/vision/datasets/ADE20K/code/loadAde20K.m
-        mask = mask.astype(int)
-        label_mask = np.zeros((mask.shape[0], mask.shape[1]))
-        # label_mask = ( mask[:,:,0] / 10.0 ) * 256 + mask[:,:,1]
-        label_mask[np.where(np.all(mask > 1, axis=-1))[:2]] = 1
-        return np.array(label_mask, dtype=np.uint8)
+    def encode_segmap(self, lbl_path):
+        labels = []
+        for lbx,lbi in enumerate(self.classes):
+            lbl_path = lbl_path[:-4] + '_' + lbi + '.tif'
+            mask = m.imread(lbl_path)
+            mask = np.array(mask, dtype=np.int32)
+            mask = mask.astype(int)
+            label_mask = np.zeros((mask.shape[0], mask.shape[1]))
+            label_mask[ mask[:,:,0] > 0 ] = lbx+1
+            np.array(label_mask, dtype=np.uint8)
+            labels.append(label_mask)
+        # 
+        # condense the labels into one big label image
+        lbs = labels[0]
+        for i in labels[1:]:
+            lbs+=i
+        return lbs
 
     def decode_segmap(self, temp, plot=False):
         # TODO:(@meetshah1995)

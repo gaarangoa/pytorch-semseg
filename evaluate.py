@@ -90,3 +90,68 @@ for epoch in range(args_n_epoch):
 
 
 max(labels[1][:].tolist())
+
+
+
+local_path = '/home/gustavo1/deep_learning/datasets/IDRiD/'
+dst = rt.RetinopathyLoader (local_path, is_transform=True)
+trainloader = data.DataLoader(dst, batch_size=4)
+for i, data in enumerate(trainloader):
+    imgs, labels = data
+    break
+
+max(labels[1][:].tolist())
+
+
+
+img_path = '/home/gustavo1/deep_learning/datasets/IDRiD/images/training/IDRiD_35.jpg'
+lbl_path = img_path[:-4] + '_MA.tif'
+
+img = m.imread(img_path)
+img = np.array(img, dtype=np.uint8)
+
+lbl = m.imread(lbl_path)
+lbl = np.array(lbl, dtype=np.int32)
+
+# if self.is_transform:
+#     img, lbl = self.transform(img, lbl)
+
+# return img, lbl
+
+# def transform(self, img, lbl):
+s_mean = np.array([104.00699, 116.66877, 122.67892])
+img_size = [128, 128]
+
+img = img[:, :, ::-1]
+img = img.astype(np.float64)
+img -= s_mean
+img = m.imresize(img, (img_size[0], img_size[1]))
+# Resize scales images from 0 to 255, thus we need
+# to divide by 255.0
+img = img.astype(float) / 255.0
+# NHWC -> NCWH
+img = img.transpose(2, 0, 1)
+
+lbl = self.encode_segmap(lbl)
+classes = np.unique(lbl)
+lbl = lbl.astype(float)
+lbl = m.imresize(lbl, (img_size[0], img_size[1]), 'nearest', mode='F')
+lbl = lbl.astype(int)
+assert(np.all(classes == np.unique(lbl)))
+
+img = torch.from_numpy(img).float()
+lbl = torch.from_numpy(lbl).long()
+# return img, lbl
+
+
+# def encode_segmap(self, lbl):
+# Refer : http://groups.csail.mit.edu/vision/datasets/ADE20K/code/loadAde20K.m
+lbl = lbl.astype(int)
+label_mask = np.zeros((lbl.shape[0], lbl.shape[1]))
+label_mask[ lbl[:,:,0] > 0 ] = 1
+label_mask = np.array(label_mask, dtype=np.uint8)
+# return np.array(label_mask, dtype=np.uint8)
+
+
+max(max(label_mask.tolist()))
+max(max(lbl[:,:,0].tolist()))
