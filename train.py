@@ -88,7 +88,7 @@ def train(args):
             optimizer.zero_grad()
             outputs = model(images)
 
-            loss = loss_fn(input=outputs, target=labels)
+            loss = loss_fn(input=outputs, target=labels, weight=(0.1, 1) )
 
             loss.backward()
             optimizer.step()

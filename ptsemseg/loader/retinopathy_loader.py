@@ -7,7 +7,7 @@ import scipy.misc as m
 import matplotlib.pyplot as plt
 
 from torch.utils import data
-
+from ptsemseg.augmentations import *
 from ptsemseg.utils import recursive_glob
 
 class RetinopathyLoader(data.Dataset):
@@ -15,6 +15,7 @@ class RetinopathyLoader(data.Dataset):
         self.root = root
         self.split = split
         self.is_transform = is_transform
+        self.augmentations = augmentations
         self.classes = ["MA"]
         self.n_classes = 2
         self.img_size = img_size if isinstance(img_size, tuple) else (img_size, img_size)
@@ -33,6 +34,9 @@ class RetinopathyLoader(data.Dataset):
         # print("processing: ", img_path)
         img = m.imread(img_path)
         img = np.array(img, dtype=np.uint8)
+
+        if self.augmentations is not None:
+            img, lbl = self.augmentations(img, lbl)
 
         if self.is_transform:
             img, lbl = self.transform(img, img_path)
