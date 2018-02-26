@@ -78,6 +78,7 @@ def train(args):
         else:
             print("No checkpoint found at '{}'".format(args.resume)) 
 
+    weight = Variable(torch.from_numpy( np.array( [0.1, 1] ) ))
     best_iou = -100.0 
     for epoch in range(args.n_epoch):
         model.train()
@@ -88,7 +89,7 @@ def train(args):
             optimizer.zero_grad()
             outputs = model(images)
 
-            loss = loss_fn(input=outputs, target=labels, weight=(0.1, 1) )
+            loss = loss_fn(input=outputs, target=labels, weight=weight )
 
             loss.backward()
             optimizer.step()
