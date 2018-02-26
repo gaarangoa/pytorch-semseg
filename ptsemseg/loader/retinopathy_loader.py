@@ -35,8 +35,8 @@ class RetinopathyLoader(data.Dataset):
         img = m.imread(img_path)
         img = np.array(img, dtype=np.uint8)
 
-        if self.augmentations is not None:
-            img, lbl = self.augmentations(img, lbl)
+        # if self.augmentations is not None:
+        #     img, lbl = self.augmentations(img, lbl)
 
         if self.is_transform:
             img, lbl = self.transform(img, img_path)
