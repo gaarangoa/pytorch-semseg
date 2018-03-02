@@ -12,7 +12,12 @@ class Compose(object):
         self.augmentations = augmentations
 
     def __call__(self, img, mask):
-        img, mask = Image.fromarray(img, mode='RGB'), Image.fromarray(mask, mode='L')            
+        # 
+        
+        img = Image.fromarray(img, mode='RGB') 
+        mask = Image.fromarray(mask, mode='L')          
+
+        
         assert img.size == mask.size
         for a in self.augmentations:
             img, mask = a(img, mask)

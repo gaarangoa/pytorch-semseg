@@ -10,13 +10,23 @@ from torch.utils import data
 from ptsemseg.augmentations import *
 from ptsemseg.utils import recursive_glob
 
+from PIL import Image, ImageOps
+
+def perform_augmentations(img, lbl, data_augmentations):
+    imb = Image.fromarray(img, mode="RGB")
+    lab = Image.fromarray(lbl, mode="RGB")
+    # 
+    for aug in data_augmentations:
+        ima, mask = aug(imb, lab)
+    return np.array(ima, dtype=np.float64), np.array(mask, dtype=np.uint8)
+
 class RetinopathyLoader(data.Dataset):
-    def __init__(self, root, split="training", is_transform=False, img_size=512, augmentations=[]):
+    def __init__(self, root, split="training", is_transform=False, img_size=512, augmentations=None):
         self.root = root
         self.split = split
         self.is_transform = is_transform
         self.augmentations = augmentations
-        self.classes = ["MA"]
+        self.classes = ["HE"]
         self.n_classes = 2
         self.img_size = img_size if isinstance(img_size, tuple) else (img_size, img_size)
         self.mean = np.array([104.00699, 116.66877, 122.67892])
@@ -33,26 +43,34 @@ class RetinopathyLoader(data.Dataset):
         img_path = self.files[self.split][index].rstrip()
         lbl_path = img_path[:-4]+ '_' + self.classes[0] + '.tif'
 
-        # print("processing: ", img_path)
+        print('processing image: ',img_path, 'binary map: ', lbl_path)
+
         img = m.imread(img_path)
         img = np.array(img, dtype=np.uint8)
         lbl = m.imread(lbl_path)
         lbl = np.array(lbl, dtype=np.uint8)
+        
+        # plt.figure(1)
+        # plt.subplot(2,1,1)
+        # plt.imshow(img)
 
         if self.augmentations is not None:
-            img, lbl = self.augmentations(img, lbl)
+            img, lbl = perform_augmentations(img, img, self.augmentations)
+
+        # plt.subplot(2,1,2)
+        # plt.imshow(img)
+        # plt.show()
 
         if self.is_transform:
             img, lbl = self.transform(img, lbl)
 
-        print(img.shape, lbl.shape)
-        
         return img, lbl
 
 
     def transform(self, img, lbl):
-        img = img[:, :, ::-1]
-        img = img.astype(np.float64)
+        print(img.shape, lbl.shape)
+        # img = img[:, :, ::-1]
+        # img = img.astype(np.float64)
         img -= self.mean
         img = m.imresize(img, (self.img_size[0], self.img_size[1]))
         # Resize scales images from 0 to 255, thus we need
@@ -106,10 +124,10 @@ class RetinopathyLoader(data.Dataset):
         r = temp.copy()
         g = temp.copy()
         b = temp.copy()
-        for l in range(0, self.n_classes):
-            r[temp == l] = l
-            g[temp == l] = l
-            b[temp == l] = 0
+        for l in range(1, self.n_classes):
+            r[temp == l] = 150+l
+            g[temp == l] = 150+l
+            b[temp == l] = 150+l
 
         rgb = np.zeros((temp.shape[0], temp.shape[1], 3))
         rgb[:, :, 0] = (r/255.0)
@@ -122,17 +140,25 @@ class RetinopathyLoader(data.Dataset):
             return rgb
 
 if __name__ == '__main__':
-    local_path = '/home/gustavo1/deep_learning/datasets/IDRiD/'
-    dst = RetinopathyLoader (local_path, is_transform=True)
-    trainloader = data.DataLoader(dst, batch_size=4)
-    for i, data in enumerate(trainloader):
-        imgs, labels = data
+    # local_path = '/home/gustavo1/deep_learning/datasets/IDRiD/'
+    from ptsemseg.loader import retinopathy_loader as rt
+    from ptsemseg.augmentations import *
+    data_aug= Compose([RandomRotate(10), RandomHorizontallyFlip()])
+
+    reload(rt)
+    local_path = '/Volumes/drive/projects/machine_learning/deep-learning/datasets/retinopathy/'
+    dst = rt.RetinopathyLoader (local_path, is_transform=True, transform=data_aug)
+    trainloader = data.DataLoader(dst, batch_size=2)
+    for i, dtx in enumerate(trainloader):
+        imgs, labels = dtx
         if i == 0:
             img = torchvision.utils.make_grid(imgs).numpy()
             img = np.transpose(img, (1, 2, 0))
             img = img[:, :, ::-1]
             plt.imshow(img)
             plt.show()
-            for j in range(4):
+            for j in range(2):
                 plt.imshow(dst.decode_segmap(labels.numpy()[j]))
                 plt.show()
+            break
+
