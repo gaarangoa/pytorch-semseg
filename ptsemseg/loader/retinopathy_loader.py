@@ -31,20 +31,26 @@ class RetinopathyLoader(data.Dataset):
 
     def __getitem__(self, index):
         img_path = self.files[self.split][index].rstrip()
+        lbl_path = img_path[:-4]+ '_' + self.classes[0] + '.tif'
+
         # print("processing: ", img_path)
         img = m.imread(img_path)
         img = np.array(img, dtype=np.uint8)
+        lbl = m.imread(lbl_path)
+        lbl = np.array(lbl, dtype=np.uint8)
 
-        # if self.augmentations is not None:
-        #     img, lbl = self.augmentations(img, lbl)
+        if self.augmentations is not None:
+            img, lbl = self.augmentations(img, lbl)
 
         if self.is_transform:
-            img, lbl = self.transform(img, img_path)
+            img, lbl = self.transform(img, lbl)
 
+        print(img.shape, lbl.shape)
+        
         return img, lbl
 
 
-    def transform(self, img, lbl_path):
+    def transform(self, img, lbl):
         img = img[:, :, ::-1]
         img = img.astype(np.float64)
         img -= self.mean
@@ -55,7 +61,7 @@ class RetinopathyLoader(data.Dataset):
         # NHWC -> NCWH
         img = img.transpose(2, 0, 1)
 
-        lbl = self.encode_segmap(lbl_path)
+        lbl = self.encode_segmap(lbl)
         classes = np.unique(lbl)
         lbl = lbl.astype(float)
         lbl = m.imresize(lbl, (self.img_size[0], self.img_size[1]), 'nearest', mode='F')
@@ -69,24 +75,30 @@ class RetinopathyLoader(data.Dataset):
         return img, lbl
 
 
-    def encode_segmap(self, lbl_path):
-        labels = []
-        lbl_t_path = lbl_path[:-4]
-        for lbx,lbi in enumerate(self.classes):
-            lbl_path = lbl_t_path + '_' + lbi + '.tif'
-            mask = m.imread(lbl_path)
-            mask = np.array(mask, dtype=np.int32)
-            mask = mask.astype(int)
-            label_mask = np.zeros((mask.shape[0], mask.shape[1]))
-            label_mask[ mask[:,:,0] > 0 ] = lbx+1
-            label_mask = np.array(label_mask, dtype=np.uint8)
-            labels.append(label_mask)
-        # 
-        # condense the labels into one big label image
-        lbs = labels[0]
-        for i in labels[1:]:
-            lbs+=i
-        return lbs
+    def encode_segmap(self, lbl):
+        mask = lbl.astype(int)
+        label_mask = np.zeros((mask.shape[0], mask.shape[1]))
+        label_mask[ mask[:,:,0] > 0 ] = 1
+        label_mask = np.array(label_mask, dtype=np.uint8)
+        return label_mask
+
+        # labels = []
+        # lbl_t_path = lbl_path[:-4]
+        # for lbx,lbi in enumerate(self.classes):
+        #     lbl_path = lbl_t_path + '_' + lbi + '.tif'
+        #     mask = m.imread(lbl_path)
+        #     mask = np.array(mask, dtype=np.int32)
+        #     mask = mask.astype(int)
+        #     label_mask = np.zeros((mask.shape[0], mask.shape[1]))
+        #     label_mask[ mask[:,:,0] > 0 ] = lbx+1
+        #     label_mask = np.array(label_mask, dtype=np.uint8)
+        #     labels.append(label_mask)
+        # # 
+        # # condense the labels into one big label image
+        # lbs = labels[0]
+        # for i in labels[1:]:
+        #     lbs+=i
+        # return lbs
 
     def decode_segmap(self, temp, plot=False):
         # TODO:(@meetshah1995)
