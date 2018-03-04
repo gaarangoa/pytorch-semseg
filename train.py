@@ -19,7 +19,7 @@ from ptsemseg.loss import *
 from ptsemseg.augmentations import *
 
 def train(args):
-
+    
     # Setup Augmentations
     data_aug= [ RandomRotate(degree=10) ]
 
