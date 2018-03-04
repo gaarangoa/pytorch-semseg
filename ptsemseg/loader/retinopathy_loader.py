@@ -50,7 +50,7 @@ class RetinopathyLoader(data.Dataset):
         img_lx = "".join(lbl_path.split('/')[-1][:-7])
         img_path = img_px + img_lx + '.jpg'
 
-        print('processing image: ',img_path, 'binary map: ', lbl_path)
+        # print('processing image: ',img_path, 'binary map: ', lbl_path)
 
         img = m.imread(img_path)
         img = np.array(img, dtype=np.uint8)
