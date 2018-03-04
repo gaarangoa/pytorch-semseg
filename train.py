@@ -19,15 +19,15 @@ from ptsemseg.loss import *
 from ptsemseg.augmentations import *
 
 def train(args):
-    
+
     # Setup Augmentations
     data_aug= [ RandomRotate(degree=10) ]
 
     # Setup Dataloader
     data_loader = get_loader(args.dataset)
     data_path = get_data_path(args.dataset)
-    t_loader = data_loader(data_path, is_transform=True, img_size=(args.img_rows, args.img_cols), augmentations=data_aug)
-    v_loader = data_loader(data_path, is_transform=True, split='validation', img_size=(args.img_rows, args.img_cols), augmentations=data_aug)
+    t_loader = data_loader(data_path, is_transform=True, img_size=(args.img_rows, args.img_cols), augmentations=data_aug, class_name=args.class_name)
+    v_loader = data_loader(data_path, is_transform=True, split='validation', img_size=(args.img_rows, args.img_cols), augmentations=data_aug, class_name=args.class_name)
 
     n_classes = t_loader.n_classes
     trainloader = data.DataLoader(t_loader, batch_size=args.batch_size, num_workers=8, shuffle=True)
@@ -148,7 +148,7 @@ if __name__ == '__main__':
                         help='Path to previous saved model to restart from')
     parser.add_argument('--visdom', nargs='?', type=bool, default=False, 
                         help='Show visualization(s) on visdom | False by  default')
-    # parser.add_argument('--category', nargs='?', type=str, default="MA", 
-                        # help='category for the classification (only for retinopathy) | MA as default')
+    parser.add_argument('--class_name', nargs='?', type=str, default="MA", 
+                        help='category for the classification (only for retinopathy) | MA, EX, HE, SE')
     args = parser.parse_args()
     train(args)

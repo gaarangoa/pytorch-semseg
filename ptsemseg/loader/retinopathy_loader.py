@@ -21,12 +21,12 @@ def perform_augmentations(img, lbl, data_augmentations):
     return np.array(ima, dtype=np.float64), np.array(mask, dtype=np.uint8)
 
 class RetinopathyLoader(data.Dataset):
-    def __init__(self, root, split="training", is_transform=False, img_size=512, augmentations=None):
+    def __init__(self, root, split="training", is_transform=False, img_size=512, augmentations=None, class_name="MA"):
         self.root = root
         self.split = split
         self.is_transform = is_transform
         self.augmentations = augmentations
-        self.classes = ["MA"]
+        self.classes = [class_name]
         self.n_classes = 2
         self.img_size = img_size if isinstance(img_size, tuple) else (img_size, img_size)
         self.mean = np.array([104.00699, 116.66877, 122.67892])
