@@ -26,7 +26,7 @@ class RetinopathyLoader(data.Dataset):
         self.split = split
         self.is_transform = is_transform
         self.augmentations = augmentations
-        self.classes = ["HE"]
+        self.classes = ["MA"]
         self.n_classes = 2
         self.img_size = img_size if isinstance(img_size, tuple) else (img_size, img_size)
         self.mean = np.array([104.00699, 116.66877, 122.67892])
