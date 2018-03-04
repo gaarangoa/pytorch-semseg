@@ -1,7 +1,7 @@
 import os
 import sys
 import torch
-import visdom
+# import visdom
 import argparse
 import numpy as np
 import torch.nn as nn
@@ -40,15 +40,15 @@ def train(args):
     running_metrics = runningScore(n_classes)
         
     # Setup visdom for visualization
-    if args.visdom:
-        vis = visdom.Visdom()
+    # if args.visdom:
+    #     vis = visdom.Visdom()
 
-        loss_window = vis.line(X=torch.zeros((1,)).cpu(),
-                           Y=torch.zeros((1)).cpu(),
-                           opts=dict(xlabel='minibatches',
-                                     ylabel='Loss',
-                                     title='Training Loss',
-                                     legend=['Loss']))
+    #     loss_window = vis.line(X=torch.zeros((1,)).cpu(),
+    #                        Y=torch.zeros((1)).cpu(),
+    #                        opts=dict(xlabel='minibatches',
+    #                                  ylabel='Loss',
+    #                                  title='Training Loss',
+    #                                  legend=['Loss']))
 
     # Setup Model
     model = get_model(args.arch, n_classes)
@@ -95,12 +95,12 @@ def train(args):
             loss.backward()
             optimizer.step()
 
-            if args.visdom:
-                vis.line(
-                    X=torch.ones((1, 1)).cpu() * i,
-                    Y=torch.Tensor([loss.data[0]]).unsqueeze(0).cpu(),
-                    win=loss_window,
-                    update='append')
+            # if args.visdom:
+            #     vis.line(
+            #         X=torch.ones((1, 1)).cpu() * i,
+            #         Y=torch.Tensor([loss.data[0]]).unsqueeze(0).cpu(),
+            #         win=loss_window,
+            #         update='append')
 
             if (i+1) % 20 == 0:
                 print("Epoch [%d/%d] Loss: %.4f" % (epoch+1, args.n_epoch, loss.data[0]))
