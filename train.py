@@ -21,8 +21,7 @@ from ptsemseg.augmentations import *
 def train(args):
 
     # Setup Augmentations
-    data_aug= Compose([RandomRotate(10),                                        
-                       RandomHorizontallyFlip()])
+    data_aug= [ RandomRotate(degree=10) ]
 
     # Setup Dataloader
     data_loader = get_loader(args.dataset)
