@@ -43,7 +43,7 @@ class RetinopathyLoader(data.Dataset):
         img_path = self.files[self.split][index].rstrip()
         lbl_path = img_path[:-4]+ '_' + self.classes[0] + '.tif'
 
-        print('processing image: ',img_path, 'binary map: ', lbl_path)
+        # print('processing image: ',img_path, 'binary map: ', lbl_path)
 
         img = m.imread(img_path)
         img = np.array(img, dtype=np.uint8)
@@ -68,7 +68,7 @@ class RetinopathyLoader(data.Dataset):
 
 
     def transform(self, img, lbl):
-        print(img.shape, lbl.shape)
+        # print(img.shape, lbl.shape)
         # img = img[:, :, ::-1]
         # img = img.astype(np.float64)
         img -= self.mean
