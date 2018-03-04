@@ -33,17 +33,24 @@ class RetinopathyLoader(data.Dataset):
         self.files = collections.defaultdict(list)
 
         for split in ["training", "validation",]:
-            file_list = recursive_glob(rootdir=self.root + 'images/' + self.split + '/', suffix='.jpg')
+            file_list = recursive_glob(rootdir=self.root + 'images/' + self.classes[0] + '/' + self.split + '/', suffix='.tif')
             self.files[split] = file_list
 
     def __len__(self):
         return len(self.files[self.split])
 
     def __getitem__(self, index):
-        img_path = self.files[self.split][index].rstrip()
-        lbl_path = img_path[:-4]+ '_' + self.classes[0] + '.tif'
+        # img_path = self.files[self.split][index].rstrip()
+        # lbl_path = img_path[:-4]+ '_' + self.classes[0] + '.tif'
 
-        # print('processing image: ',img_path, 'binary map: ', lbl_path)
+        lbl_path = self.files[self.split][index].rstrip()
+        # print(lbl_path)
+
+        img_px = "/".join(lbl_path.split('/')[:-3])+'/NAR/'
+        img_lx = "".join(lbl_path.split('/')[-1][:-7])
+        img_path = img_px + img_lx + '.jpg'
+
+        print('processing image: ',img_path, 'binary map: ', lbl_path)
 
         img = m.imread(img_path)
         img = np.array(img, dtype=np.uint8)

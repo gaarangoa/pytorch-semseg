@@ -17,8 +17,8 @@ data_aug = [ RandomRotate(degree=10) ]
 
 reload(rt)
 reload(augmentations)
-# local_path = '/Volumes/drive/projects/machine_learning/deep-learning/datasets/retinopathy/'
-local_path = '/data/jeffery/datasets/retinopathy'
+local_path = '/Volumes/drive/projects/machine_learning/deep-learning/datasets/retinopathy/'
+# local_path = '/data/jeffery/datasets/retinopathy'
 dst = rt.RetinopathyLoader (local_path, is_transform=True, augmentations=data_aug)
 trainloader = data.DataLoader(dst, batch_size=2)
 for i, dtx in enumerate(trainloader):
