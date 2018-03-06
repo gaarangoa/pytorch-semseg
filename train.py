@@ -82,6 +82,7 @@ def train(args):
     best_iou = -100.0 
     for epoch in range(args.n_epoch):
         model.train()
+        print(epoch+1, 'of', args.n_epoch)
         for i, (images, labels) in enumerate(trainloader):
             images = Variable(images.cuda())
             labels = Variable(labels.cuda())
