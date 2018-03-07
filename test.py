@@ -46,11 +46,12 @@ def test(args):
     img = torch.from_numpy(img).float()
 
     # Setup Model
-    model = get_model(args.model_path[:args.model_path.find('_')], n_classes)
+    print(args.model_path)
+    model = get_model(args.arch, n_classes)
     state = convert_state_dict(torch.load(args.model_path)['model_state'])
     model.load_state_dict(state)
     model.eval()
-    
+
     model.cuda(0)
     images = Variable(img.cuda(0), volatile=True)
 
@@ -102,5 +103,7 @@ if __name__ == '__main__':
                         help='Path of the input image')
     parser.add_argument('--out_path', nargs='?', type=str, default=None, 
                         help='Path of the output segmap')
+    parser.add_argument('--arch', nargs='?', type=str, default=None, 
+                        help='architecture used')
     args = parser.parse_args()
     test(args)
