@@ -125,7 +125,7 @@ def train(args):
             state = {'epoch': epoch+1,
                      'model_state': model.state_dict(),
                      'optimizer_state' : optimizer.state_dict(),}
-            torch.save(state, "{}_{}_best_model.pkl".format(args.arch, args.dataset))
+            torch.save(state, "{}_{}_{}_best_model.pkl".format(args.arch, args.dataset, args.class_name))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Hyperparams')
