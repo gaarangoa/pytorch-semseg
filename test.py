@@ -26,6 +26,7 @@ def test(args):
 
     # Setup Model
     print(args.model_path)
+    n_classes = loader.n_classes
     model = get_model(args.arch, n_classes)
     state = convert_state_dict(torch.load(args.model_path)['model_state'])
     model.load_state_dict(state)
@@ -40,7 +41,7 @@ def test(args):
     data_loader = get_loader(args.dataset)
     data_path = get_data_path(args.dataset)
     loader = data_loader(data_path, is_transform=True)
-    n_classes = loader.n_classes
+    
     
     resized_img = misc.imresize(img, (loader.img_size[0], loader.img_size[1]), interp='bicubic')
 
