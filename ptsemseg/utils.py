@@ -54,7 +54,7 @@ def convert_state_dict(state_dict):
        :param state_dict is the loaded DataParallel model_state
     
     """
-    print(state_dict)
+    # print(state_dict)
     for k, v in state_dict.items():
         name = k[7:] # remove `module.`
         state_dict.update({name: v})
