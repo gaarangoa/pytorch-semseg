@@ -55,7 +55,8 @@ def convert_state_dict(state_dict):
     
     """
     # print(state_dict)
-    for k, v in state_dict.items():
+    for k in state_dict.keys():
+        v = state_dict[k]
         name = k[7:] # remove `module.`
         state_dict.update({name: v})
         del state_dict[k]
