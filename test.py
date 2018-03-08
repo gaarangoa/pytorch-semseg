@@ -24,6 +24,15 @@ except:
 
 def test(args):
 
+    # Setup Model
+    print(args.model_path)
+    model = get_model(args.arch, n_classes)
+    state = convert_state_dict(torch.load(args.model_path)['model_state'])
+    model.load_state_dict(state)
+    model.eval()
+
+    model.cuda(0)
+
     # Setup image
     print("Read Input Image from : {}".format(args.img_path))
     img = misc.imread(args.img_path)
@@ -45,17 +54,9 @@ def test(args):
     img = np.expand_dims(img, 0)
     img = torch.from_numpy(img).float()
 
-    # Setup Model
-    print(args.model_path)
-    model = get_model(args.arch, n_classes)
-    state = convert_state_dict(torch.load(args.model_path)['model_state'])
-    model.load_state_dict(state)
-    model.eval()
-
-    model.cuda(0)
     # model
     images = Variable(img.cuda(0), volatile=True)
-    weight = Variable(torch.cuda.FloatTensor( np.array( [0.1, 1] ) ))
+    # weight = Variable(torch.cuda.FloatTensor( np.array( [0.1, 1] ) ))
 
     outputs = F.softmax(model(images), dim=1)
     
