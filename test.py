@@ -52,7 +52,8 @@ def test(args):
     model.load_state_dict(state)
     model.eval()
 
-    model.cuda(0)
+    # model.cuda(0)
+    model
     images = Variable(img.cuda(0), volatile=True)
 
     outputs = F.softmax(model(images), dim=1)
@@ -80,8 +81,9 @@ def test(args):
         print("Dense CRF Processed Mask Saved at: {}".format(dcrf_path))
 
     if torch.cuda.is_available():
-        model.cuda(0)
-        images = Variable(img.cuda(0), volatile=True)
+        # model.cuda(0)
+        model
+        images = Variable(img, volatile=True)
     else:
         images = Variable(img, volatile=True)
 
