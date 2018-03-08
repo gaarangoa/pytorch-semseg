@@ -59,12 +59,13 @@ def convert_state_dict(state_dict):
     for k in state_dict.keys():
         v = state_dict[k]
         name = k[7:] # remove `module.`
-        state_dict[name] = v
+        # state_dict[name] = v
         # del state_dict[k]
-        rem.append(k)
+        rem.append([k, {name: v}])
     
     for i in rem:
-        del state_dict[i]
+        del state_dict[i[0]]
+        state_dict.update(i[1])
     
     return state_dict
 
