@@ -57,7 +57,7 @@ def test(args):
     images = Variable(img.cuda(0), volatile=True)
     weight = Variable(torch.cuda.FloatTensor( np.array( [0.1, 1] ) ))
 
-    outputs = F.softmax(model(images), dim=1, weight=weight)
+    outputs = F.softmax(model(images), dim=1)
     
     if args.dcrf == "True":
         unary = outputs.data.cpu().numpy()
