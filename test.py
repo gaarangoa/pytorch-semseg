@@ -48,7 +48,7 @@ def test(args):
     for img_path in img_list:
 
         img = misc.imread(img_path)
-        resized_img = misc.imresize(img, (loader.img_size[0], loader.img_size[1]), interp='bicubic')
+        resized_img = misc.imresize(img, (4288, 2848), interp='bicubic')
 
         img = img[:, :, ::-1]
         img = img.astype(np.float64)
