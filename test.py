@@ -48,16 +48,19 @@ def test(args):
     for img_path in img_list:
 
         img = misc.imread(img_path)
-        resized_img = misc.imresize(img, (loader.img_size[0], loader.img_size[1]), interp='bicubic')
 
-        img = img[:, :, ::-1]
-        img = img.astype(np.float64)
         img -= loader.mean
-        img = misc.imresize(img, (loader.img_size[0], loader.img_size[1]) )
+        img = misc.imresize( img, (loader.img_size[0], loader.img_size[1]) )
+
+        # img = img[:, :, ::-1]
+        # img = img.astype(np.float64)
+        
+        # img = misc.imresize(img, (loader.img_size[0], loader.img_size[1]) )
         img = img.astype(float) / 255.0
         # NHWC -> NCWH
         img = img.transpose(2, 0, 1) 
-        img = np.expand_dims(img, 0)
+        # img = np.expand_dims(img, 0)
+        # img = torch.from_numpy(img).float()
         img = torch.from_numpy(img).float()
 
         # model

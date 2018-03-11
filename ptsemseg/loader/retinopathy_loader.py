@@ -137,9 +137,9 @@ class RetinopathyLoader(data.Dataset):
             b[temp == l] = l
         # 
         rgb = np.zeros((temp.shape[0], temp.shape[1], 3))
-        rgb[:, :, 0] = (r/255.0)
-        rgb[:, :, 1] = (g/255.0)
-        rgb[:, :, 2] = (b/255.0)
+        rgb[:, :, 0] = (r/1.0)
+        rgb[:, :, 1] = (g/1.0)
+        rgb[:, :, 2] = (b/1.0)
         if plot:
             plt.imshow(rgb)
             plt.show()
