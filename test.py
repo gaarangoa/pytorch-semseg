@@ -53,7 +53,7 @@ def test(args):
         img = img[:, :, ::-1]
         img = img.astype(np.float64)
         img -= loader.mean
-        img = misc.imresize(img, (loader.img_size[0], loader.img_size[1]))
+        img = misc.imresize(img, (loader.img_size[0], loader.img_size[1]) )
         img = img.astype(float) / 255.0
         # NHWC -> NCWH
         img = img.transpose(2, 0, 1) 
@@ -98,7 +98,9 @@ def test(args):
         pred = np.squeeze(outputs.data.max(1)[1].cpu().numpy(), axis=0)
         decoded = loader.decode_segmap(pred)
         print('Classes found: ', np.unique(pred))
-        decoded = misc.imresize(decoded, (4288, 2848), interp='bicubic')
+
+        decoded = misc.imresize(decoded, (4288, 2848) , interp='bicubic')
+        
         out_file = args.out_path+'/'+img_path.split('/')[-1]
         misc.imsave(out_file, decoded)
         print("Segmentation Mask Saved at: {}".format(out_file))
