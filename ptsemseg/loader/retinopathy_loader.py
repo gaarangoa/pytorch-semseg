@@ -104,12 +104,12 @@ class RetinopathyLoader(data.Dataset):
         mask = lbl.astype(int)
         label_mask = np.zeros((mask.shape[0], mask.shape[1]))
         label_mask[ mask[:,:,0] > 0 ] = 1
+        label_mask[ mask[:,:,1] > 0 ] = 1
+        label_mask[ mask[:,:,2] > 0 ] = 1
         label_mask = np.array(label_mask, dtype=np.uint8)
         return label_mask
 
-        # labels = []
-        # lbl_t_path = lbl_path[:-4]
-        # for lbx,lbi in enumerate(self.classes):
+        # labels = []l        # for lbx,lbi in enumerate(self.classes):
         #     lbl_path = lbl_t_path + '_' + lbi + '.tif'
         #     mask = m.imread(lbl_path)
         #     mask = np.array(mask, dtype=np.int32)
@@ -131,11 +131,11 @@ class RetinopathyLoader(data.Dataset):
         r = temp.copy()
         g = temp.copy()
         b = temp.copy()
-        for l in range(1, self.n_classes):
-            r[temp == l] = 150+l
-            g[temp == l] = 150+l
-            b[temp == l] = 150+l
-
+        for l in range(0, self.n_classes):
+            r[temp == l] = l
+            g[temp == l] = l
+            b[temp == l] = l
+        # 
         rgb = np.zeros((temp.shape[0], temp.shape[1], 3))
         rgb[:, :, 0] = (r/255.0)
         rgb[:, :, 1] = (g/255.0)
