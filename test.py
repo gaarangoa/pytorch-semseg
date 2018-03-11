@@ -99,7 +99,7 @@ def test(args):
         decoded = loader.decode_segmap(pred)
         print('Classes found: ', np.unique(pred))
 
-        decoded = misc.imresize(decoded, (4288, 2848) , interp='bicubic')
+        decoded = misc.imresize(decoded, (2848,4288 ) , interp='bicubic')
         
         out_file = args.out_path+'/'+img_path.split('/')[-1]
         misc.imsave(out_file, decoded)
