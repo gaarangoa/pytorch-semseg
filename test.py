@@ -48,7 +48,7 @@ def test(args):
     for img_path in img_list:
 
         img = misc.imread(img_path)
-        resized_img = misc.imresize(img, (4288, 2848), interp='bicubic')
+        resized_img = misc.imresize(img, (loader.img_size[0], loader.img_size[1]), interp='bicubic')
 
         img = img[:, :, ::-1]
         img = img.astype(np.float64)
@@ -98,6 +98,7 @@ def test(args):
         pred = np.squeeze(outputs.data.max(1)[1].cpu().numpy(), axis=0)
         decoded = loader.decode_segmap(pred)
         print('Classes found: ', np.unique(pred))
+        decoded = misc.imresize(img, (4288, 2848), interp='bicubic')
         out_file = args.out_path+'/'+img_path.split('/')[-1]
         misc.imsave(out_file, decoded)
         print("Segmentation Mask Saved at: {}".format(out_file))
