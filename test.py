@@ -51,9 +51,9 @@ def test(args):
 
         img = img.astype(np.float64)
         img -= loader.mean
-        img = misc.imresize( img, (loader.img_size[0], loader.img_size[1]) )
-
         img = img[:, :, ::-1]
+        img = misc.imresize( img, (4288, 2848) )
+
         # img = img.astype(np.float64)
         
         # img = misc.imresize(img, (loader.img_size[0], loader.img_size[1]) )
