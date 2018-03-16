@@ -52,14 +52,14 @@ def test(args):
         img = img.astype(np.float64)
         img -= loader.mean
         img = img[:, :, ::-1]
-        img = misc.imresize( img, (4288, 2848) )
+        img = misc.imresize(img, (loader.img_size[0], loader.img_size[1]) )
 
         # img = img.astype(np.float64)
-        
+
         # img = misc.imresize(img, (loader.img_size[0], loader.img_size[1]) )
         img = img.astype(float) / 255.0
         # NHWC -> NCWH
-        img = img.transpose(2, 0, 1) 
+        img = img.transpose(2, 0, 1)
         img = np.expand_dims(img, 0)
         img = torch.from_numpy(img).float()
         # img = torch.from_numpy(img).float()
@@ -69,7 +69,7 @@ def test(args):
         # weight = Variable(torch.cuda.FloatTensor( np.array( [0.1, 1] ) ))
 
         outputs = F.softmax(model(images), dim=1)
-        
+
         if args.dcrf == "True":
             unary = outputs.data.cpu().numpy()
             unary = np.squeeze(unary, 0)
@@ -78,7 +78,7 @@ def test(args):
             w, h, c = unary.shape
             unary = unary.transpose(2, 0, 1).reshape(loader.n_classes, -1)
             unary = np.ascontiguousarray(unary)
-        
+
             resized_img = np.ascontiguousarray(resized_img)
 
             d = dcrf.DenseCRF2D(w, h, loader.n_classes)
@@ -104,28 +104,28 @@ def test(args):
         print('Classes found: ', np.unique(pred))
 
         decoded = misc.imresize(decoded, (2848,4288 ) , interp='bicubic')
-        
+
         out_file = args.out_path+'/'+img_path.split('/')[-1]
         misc.imsave(out_file, decoded)
         print("Segmentation Mask Saved at: {}".format(out_file))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Params')
-    parser.add_argument('--model_path', nargs='?', type=str, default='fcn8s_pascal_1_26.pkl', 
+    parser.add_argument('--model_path', nargs='?', type=str, default='fcn8s_pascal_1_26.pkl',
                         help='Path to the saved model')
-    parser.add_argument('--dataset', nargs='?', type=str, default='pascal', 
+    parser.add_argument('--dataset', nargs='?', type=str, default='pascal',
                         help='Dataset to use [\'pascal, camvid, ade20k etc\']')
     parser.add_argument('--dcrf', nargs='?', type=str, default="False",
                         help='Enable DenseCRF based post-processing')
-    parser.add_argument('--img_path', nargs='?', type=str, default=None, 
+    parser.add_argument('--img_path', nargs='?', type=str, default=None,
                         help='Path of the input image')
-    parser.add_argument('--img_dir', nargs='?', type=str, default=None, 
-                        help='directory with input images')    
-    parser.add_argument('--suffix', nargs='?', type=str, default=None, 
-                        help='images suffix')                                   
-    parser.add_argument('--out_path', nargs='?', type=str, default=None, 
+    parser.add_argument('--img_dir', nargs='?', type=str, default=None,
+                        help='directory with input images')
+    parser.add_argument('--suffix', nargs='?', type=str, default="jpg",
+                        help='images suffix')
+    parser.add_argument('--out_path', nargs='?', type=str, default=None,
                         help='Path of the output segmap')
-    parser.add_argument('--arch', nargs='?', type=str, default=None, 
+    parser.add_argument('--arch', nargs='?', type=str, default=None,
                         help='architecture used')
     args = parser.parse_args()
     test(args)
