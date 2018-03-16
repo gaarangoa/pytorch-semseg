@@ -64,6 +64,7 @@ def test(args):
         img = torch.from_numpy(img).float()
         # img = torch.from_numpy(img).float()
 
+
         # model
         images = Variable(img.cuda(0), volatile=True)
         # weight = Variable(torch.cuda.FloatTensor( np.array( [0.1, 1] ) ))
