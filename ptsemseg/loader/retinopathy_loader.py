@@ -15,7 +15,7 @@ from PIL import Image, ImageOps
 def perform_augmentations(img, lbl, data_augmentations):
     imb = Image.fromarray(img, mode="RGB")
     lab = Image.fromarray(lbl, mode="RGB")
-    # 
+    #
     for aug in data_augmentations:
         ima, mask = aug(imb, lab)
     return np.array(ima, dtype=np.float64), np.array(mask, dtype=np.uint8)
@@ -56,13 +56,13 @@ class RetinopathyLoader(data.Dataset):
         img = np.array(img, dtype=np.uint8)
         lbl = m.imread(lbl_path)
         lbl = np.array(lbl, dtype=np.uint8)
-        
+
         # plt.figure(1)
         # plt.subplot(2,1,1)
         # plt.imshow(img)
 
         if self.augmentations is not None:
-            img, lbl = perform_augmentations(img, img, self.augmentations)
+            img, lbl = perform_augmentations(img, lbl, self.augmentations)
 
         # plt.subplot(2,1,2)
         # plt.imshow(img)
@@ -118,7 +118,7 @@ class RetinopathyLoader(data.Dataset):
         #     label_mask[ mask[:,:,0] > 0 ] = lbx+1
         #     label_mask = np.array(label_mask, dtype=np.uint8)
         #     labels.append(label_mask)
-        # # 
+        # #
         # # condense the labels into one big label image
         # lbs = labels[0]
         # for i in labels[1:]:
@@ -135,7 +135,7 @@ class RetinopathyLoader(data.Dataset):
             r[temp == l] = l
             g[temp == l] = l
             b[temp == l] = l
-        # 
+        #
         rgb = np.zeros((temp.shape[0], temp.shape[1], 3))
         rgb[:, :, 0] = (r/1.0)
         rgb[:, :, 1] = (g/1.0)
