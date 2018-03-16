@@ -1,8 +1,8 @@
 {
-    "retinopathy": {
+    "retinopathy2": {
         "data_path": "/mnt/data/jeffery/datasets/retinopathy/"
     },
-    "retinopathy2": {
+    "retinopathy": {
         "data_path": "/home/gustavo1/deep_learning/datasets/IDRiD/"
     },
 
