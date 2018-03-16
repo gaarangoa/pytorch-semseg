@@ -78,7 +78,7 @@ def train(args):
         else:
             print("No checkpoint found at '{}'".format(args.resume))
 
-    weight = Variable(torch.cuda.FloatTensor( np.array( [0.01, 1] ) ))
+    weight = Variable(torch.cuda.FloatTensor( np.array( [0.001, 1] ) ))
     best_iou = -100.0
     for epoch in range(args.n_epoch):
         model.train()
